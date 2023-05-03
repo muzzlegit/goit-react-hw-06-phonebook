@@ -1,10 +1,14 @@
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+//SLICES
+import { setFilter, getFilter } from 'redux/filterSlice';
 //ICONS
 import { TfiMarkerAlt } from 'react-icons/tfi';
 //STYLES
 import { Box, Label, Input } from './Filter.styled';
 
-export default function Filter({ filter, onFilterChange }) {
+export default function Filter() {
+  const filter = useSelector(getFilter);
+  const dispatch = useDispatch();
   return (
     <Box>
       <Label>
@@ -16,7 +20,7 @@ export default function Filter({ filter, onFilterChange }) {
           required
           value={filter}
           onChange={e => {
-            onFilterChange(e.target.value);
+            dispatch(setFilter(e.target.value));
           }}
         />
       </Label>
@@ -24,8 +28,3 @@ export default function Filter({ filter, onFilterChange }) {
     </Box>
   );
 }
-
-Filter.propTypes = {
-  filter: PropTypes.string.isRequired,
-  onFilterChange: PropTypes.func.isRequired,
-};

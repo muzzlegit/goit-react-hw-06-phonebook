@@ -1,39 +1,40 @@
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+//SELECTORS
+import { getContactsList } from 'redux/contactsSlice';
+import { getFilter } from 'redux/filterSlice';
 //COMPONENTS
 import ContactItem from 'components/ContactItem/ContactItem';
 //STYLE
 import { List, Item } from './ContactList.styled';
 
-export default function ContactList({
-  isContacts,
-  contacstList,
-  deleteContact,
-}) {
+export default function ContactList() {
+  const contacstList = useSelector(getContactsList);
+  console.log('🚀 ~ contacstList:', contacstList);
+
+  const filter = useSelector(getFilter);
+  const [visibleContacts, setVisibleContacts] = useState(contacstList);
+
+  useEffect(() => {
+    const visibleContact = contacstList.filter(({ name }) => {
+      return name.toLowerCase().includes(filter.toLowerCase());
+    });
+    setVisibleContacts(visibleContact);
+  }, [contacstList, filter]);
+
   return (
     <List>
-      {!contacstList.length ? (
+      {!visibleContacts.length ? (
         <Item color="black">
-          {isContacts
+          s
+          {contacstList.length
             ? 'В тебе немає такого контакту'
             : 'Здається, в тебе немає жодного знайомого :('}
         </Item>
       ) : null}
-      {contacstList.map((contact, index) => {
-        return (
-          <ContactItem
-            key={index}
-            contact={contact}
-            index={index}
-            deleteContact={deleteContact}
-          />
-        );
+      {visibleContacts.map((contact, index) => {
+        return <ContactItem key={index} contact={contact} index={index} />;
       })}
     </List>
   );
 }
-
-ContactList.propTypes = {
-  isContacts: PropTypes.number.isRequired,
-  contacstList: PropTypes.arrayOf(PropTypes.object.isRequired),
-  deleteContact: PropTypes.func.isRequired,
-};
