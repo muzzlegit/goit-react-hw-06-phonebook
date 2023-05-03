@@ -24,14 +24,13 @@ export default function ContactList() {
 
   return (
     <List>
-      {!visibleContacts.length ? (
+      {!visibleContacts.length && (
         <Item color="black">
-          s
           {contacstList.length
             ? 'В тебе немає такого контакту'
             : 'Здається, в тебе немає жодного знайомого :('}
         </Item>
-      ) : null}
+      )}
       {visibleContacts.map((contact, index) => {
         return <ContactItem key={index} contact={contact} index={index} />;
       })}
